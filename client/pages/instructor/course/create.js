@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import CourseCreateForm from "../../../components/forms/CourseCreateForm";
+import CourseCreateForm from "../../../components/forms/CourseCreateForm.js";
+import InstructorRoute from "../../../components/routes/InstructorRoute.js";
 const CourseCreate = () => {
   const [values, setValues] = useState({
     name: "",
@@ -31,6 +32,7 @@ const CourseCreate = () => {
 
   
   return (
+    <InstructorRoute>
     <div className="container mt-4">
       <h1 className="jumbotron text-center">Create Course</h1>
       <CourseCreateForm
@@ -45,6 +47,7 @@ const CourseCreate = () => {
       {JSON.stringify(values,null,4)}
       </pre>
     </div>
+    </InstructorRoute>
   );
 };
 

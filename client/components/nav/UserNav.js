@@ -1,12 +1,19 @@
-import React from 'react'
+
 import Link from 'next/link'
+import React, {  useEffect, useState } from 'react'
 
 const UserNav = () => {
+  const [current, setCurrent] = useState("");
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+
+  }, [process.browser && window.location.pathname]);
   return (
-    <div className='nav flex-column nav-pills mt-2'>
+    <div className='nav flex-column nav-pills'>
          <Link href="/user">
               
-                Dashboard
+         <p className={`nav-link ${current == "/user" && "active" }`}>Dashboard</p>
               
             </Link>
     </div>

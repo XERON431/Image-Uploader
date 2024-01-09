@@ -17,7 +17,12 @@ const csrfProtection = csurf({ cookie: true });
 
 const mongoAtlasUri = 'mongodb+srv://username:siddhant@cluster0.gnmxc7i.mongodb.net/?retryWrites=true&w=majority';
 
-mongoose.connect(mongoAtlasUri)
+mongoose.connect(mongoAtlasUri, {
+  useNewUrlParser: true,
+  // useFindAndModify: false,
+  useUnifiedTopology:true,
+  // useCreateIndex: true,
+})
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 

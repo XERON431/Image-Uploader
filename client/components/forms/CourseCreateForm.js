@@ -35,7 +35,7 @@ const CourseCreateForm = ({ values, handleChange, setValues, handleSubmit,handle
       
           <Form.Group>
   <Form.Label>Course Pricing</Form.Label>
-  <Form.Select onChange={(e) => setValues({ ...values, paid: e.target.value === "true" })} defaultValue="Choose...">
+  <Form.Select onChange={(e) => setValues({ ...values, paid: e.target.value == "true" })} defaultValue="Choose...">
     <option value="true">Paid</option>
     <option value="false">Free</option>
   </Form.Select>
