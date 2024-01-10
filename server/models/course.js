@@ -63,7 +63,7 @@ const courseSchema = new mongoose.Schema({
   },
   lessons: [lessonSchema],
   // Other fields related to a course
-}, { tijmestamps: true }
+}, { timestamps: true }
 );
 
 export default mongoose.model("Course", courseSchema);
