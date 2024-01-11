@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema;
  
@@ -29,7 +29,7 @@ const lessonSchema = new mongoose.Schema({
 
 // Course Schema
 const courseSchema = new mongoose.Schema({
-    title: {
+    name: {
     type: String,
     trim: true,
     minlength: 3,
@@ -49,6 +49,7 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  image: {},
   category: {
     type: String,
   },
@@ -63,7 +64,7 @@ const courseSchema = new mongoose.Schema({
   },
   lessons: [lessonSchema],
   // Other fields related to a course
-}, { tijmestamps: true }
+}, { timestamps: true }
 );
 
 export default mongoose.model("Course", courseSchema);

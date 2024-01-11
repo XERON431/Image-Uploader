@@ -1,6 +1,9 @@
 import AWS from "aws-sdk"
 import { nanoid } from "nanoid";
+import Course from "../models/course.js";
+import slugify from "slugify";
 import dotenv from 'dotenv';
+// import { useRouter } from 'next/router';
 dotenv.config();
 
 const awsConfig = {
@@ -67,3 +70,36 @@ export const uploadImage = async (req, res) => {
 //         console.log(err);
 //     }
 // }
+
+export const create = async (req, res) => {
+    // console.log(req.body.name.toLowerCase());
+    // return;
+    try {
+        const alreadyExist = await Course.findOne({
+            slug: slugify(req.body.name.toLowerCase()),
+        });
+        if(alreadyExist) return res.status(400).send("Title is taken");
+        
+        const course = await new Course({
+            slug: slugify(req.body.name),
+            instructor: req.auth._id,
+            ...req.body,
+        }).save();
+        // console.log("abhi tak theek hai bhai ")
+        res.json(course);
+    } catch(err) {
+        console.log(err); 
+        return res.status(400).send("Course create failed. Try again!")
+    }
+}
+
+export const read = async (req, res) => {
+    try{
+        const course = await Course.findOne({ slug: req.params.slug})
+        .populate("instructor", "_id name")
+        .exec();
+        res.json(course);
+    } catch (err) {
+        console.log(err);
+    }
+}

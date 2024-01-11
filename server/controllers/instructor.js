@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import Course from "../models/course.js";
 import queryString from "query-string";
 import dotenv from 'dotenv';
 import stripe from "stripe";
@@ -68,6 +69,19 @@ export const currentInstructor = async (req,res) => {
             res.json({ ok: true});
         }
     } catch (err) {
+        console.log(err);
+    }
+};
+
+export const instructorCourses = async (req, res) => {
+   
+    try{
+        const courses = await Course.find({ instructor: req.auth._id})
+        .sort({ createdAt: -1})
+        .exec();
+        //  console.log("helloji")
+        res.json(courses);
+    } catch(err) {
         console.log(err);
     }
 }

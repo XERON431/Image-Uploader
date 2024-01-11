@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { SyncOutlined } from "@ant-design/icons";
 import InstructorNav from "../nav/InstructorNav";
 //nkjnknk
 const InstructorRoute = ({ children }) => {

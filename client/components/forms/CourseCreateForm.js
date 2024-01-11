@@ -6,19 +6,19 @@ const CourseCreateForm = ({
   setValues,
   handleSubmit,
   handleImage,
-  preview,
+  preview, 
   uploadButtonText,
   // handleImageRemove,
 }) => {
   const [buttonValue, setButtonValue] = useState('Save & Continue');
 
   const handleCostChange = (e) => {
-    setValues({ ...values, cost: parseInt(e.target.value) });
+    setValues({ ...values, price: parseInt(e.target.value) });
   };
 
   const handlePaidChange = (e) => {
-    setValues({ ...values, paid: e.target.value === 'paid', cost: 0 });
-    setButtonValue(e.target.value === 'paid' ? 'Save & Continue' : 'Submit');
+    setValues({ ...values, paid: e.target.value == 'paid', cost: 0 });
+    setButtonValue(e.target.value == 'paid' ? 'Save & Continue' : 'Submit');
   };
 
   const renderCostInput = () => {
@@ -26,12 +26,12 @@ const CourseCreateForm = ({
       return (
         <div className="form-group d-flex align-items-center mb-3">
           <label htmlFor="cost" className="mr-2">
-            Cost:
+            Price:
           </label>
           <select
-            name="cost"
+            name="Price"
             className="form-control"
-            value={values.cost}
+            value={values.price}
             onChange={handleCostChange}
           >
             {[...Array(100)].map((_, index) => (
