@@ -22,10 +22,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/instructor/course/create": [
+    "/instructor": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/instructor/course/create.js"
+      "static/chunks/pages/instructor.js"
     ],
     "/instructor/course/view/[slug]": [
       "static/chunks/webpack.js",

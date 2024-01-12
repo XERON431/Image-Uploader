@@ -2,6 +2,7 @@ import AWS from "aws-sdk"
 import { nanoid } from "nanoid";
 import Course from "../models/course.js";
 import slugify from "slugify";
+import {readFileSync} from'fs' 
 import dotenv from 'dotenv';
 // import { useRouter } from 'next/router';
 dotenv.config();
@@ -101,5 +102,35 @@ export const read = async (req, res) => {
         res.json(course);
     } catch (err) {
         console.log(err);
+    }
+}
+
+export const uploadVideo = async (req,res) => {
+    try{
+        if(req.auth._id != req.params.instructorId)
+        {
+            return res.status(400).send("Unauthorized");
+        }
+        const { video } = req.files;
+        if(!video) return res.status(400).send("No Video");
+        const params = {
+            Bucket: "edemy-bucket-siddhant",
+            Key: `${nanoid()}.${video.type.split("/")[1]}`,
+            Body: readFileSync(video.path),
+            ACL: "public-read",
+            ContentType: video.type,
+        };
+
+        //upload to s3
+        S3.upload(params, (err, data) => {
+            if(err){
+                console.log(err);
+                res.sendStatus(400);
+            }
+            console.log(data);
+            res.send(data);
+        })
+    } catch (err) {
+        console.loog(err);
     }
 }
