@@ -28,8 +28,8 @@ const closeButtonStyle = {
   cursor: "pointer",
 };
 
-const Modal = ({ isOpen, onClose, children }) => {
-  const modalDisplay = isOpen ? { ...modalStyle, display: "block" } : modalStyle;
+const Modal = ({ visible, onClose, children }) => {
+  const modalDisplay = visible ? { ...modalStyle, display: "block" } : modalStyle;
 
   return (
     <div style={modalDisplay}>

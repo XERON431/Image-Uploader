@@ -8,6 +8,7 @@ const AddLessonForm = ({
     uploadButtonText,
     handleVideo,
     progress,
+    setVisible,
 }) => {
     return (
         <div className="container pt-3">

@@ -27,10 +27,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/instructor.js"
     ],
-    "/instructor/course/view/[slug]": [
+    "/instructor/course/edit/[slug]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/instructor/course/view/[slug].js"
+      "static/chunks/pages/instructor/course/edit/[slug].js"
     ]
   },
   "ampFirstPages": []

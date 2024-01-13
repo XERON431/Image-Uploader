@@ -9,6 +9,7 @@ const CourseCreateForm = ({
   preview, 
   uploadButtonText,
   // handleImageRemove,
+  editPage=false
 }) => {
   const [buttonValue, setButtonValue] = useState('Save & Continue');
 
