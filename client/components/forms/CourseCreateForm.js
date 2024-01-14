@@ -135,18 +135,19 @@ const CourseCreateForm = ({
           </div>
         )}
       </div>
+      {!editPage && 
       <div className="row">
-        <div className="col">
-          <button
-            onClick={handleSubmit}
-            disabled={values.loading || values.uploading}
-            className="btn btn-primary"
-            type="submit"
-          >
-            {values.loading ? 'Saving...' : buttonValue}
-          </button>
-        </div>
+      <div className="col">
+        <button
+          onClick={handleSubmit}
+          disabled={values.loading || values.uploading}
+          className="btn btn-primary"
+          type="submit"
+        >
+          {values.loading ? 'Saving...' : buttonValue}
+        </button>
       </div>
+    </div>}
     </form>
     )}
     </>
