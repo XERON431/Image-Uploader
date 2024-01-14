@@ -159,3 +159,20 @@ export const addLesson = async (req, res) => {
         return res.status(400).send("Add lesson failed");
     }
 }
+export const update = async (req, res) =>{
+    try{
+        const { slug } = req.params;
+        const course = await Course.findOne({ slug }).exec();
+        if(req.auth._id != course.instructor){
+            return res.status(400).send("Unauthorized");
+        } 
+        const updated = await Course.findOneAndUpdate({ slug }, req.body, {
+            new: true,
+        }).exec();
+        // console.log(updated);
+        res.json(updated);
+    } catch(err){
+        console.log(err);
+        return res.status(400).send(err.message);
+    }
+} 

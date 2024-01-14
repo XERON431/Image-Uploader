@@ -16,8 +16,10 @@ const CourseEdit = () => {
     description: "",
     uploading: false,
     paid: true,
+    category: "",
     price: "0",
     loading: false,
+    lessons: [],
   });
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
@@ -30,6 +32,7 @@ const CourseEdit = () => {
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
     setValues(data);
+    setImage(data.image);
   }
 
   const handleImage = (e) => {
@@ -80,12 +83,12 @@ const CourseEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/course", {
+      const { data } = await axios.put(`/api/course/${slug}`, {
         ...values,
         image,
       });
-      toast("Great! Now you can start adding lessons");
-      router.push("/instructor");
+      toast("Course updated");
+      // router.push("/instructor");
     } catch (err) {
       console.log("Error:", err);
       // Handle error and show appropriate message
@@ -111,6 +114,41 @@ const CourseEdit = () => {
       {/* <pre>{JSON.stringify(values, null, 4)}</pre>
       <hr />
       <pre>{JSON.stringify(image, null, 4)}</pre> */}
+      <div className="row pb-5">
+              <div className="col lesson-list">
+                <br/>
+                <br/>
+                <h4>Lessons</h4>
+                <br/>
+                <ol>
+                  {values && values.lessons && values.lessons.map((lesson, index) => (
+                    <li key={index} style={{ listStyle: 'none', marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            backgroundColor: '#007bff',
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: '10px',
+                          }}
+                        >
+                          {index + 1}
+                        </div>
+                        <div>
+                          {lesson.title}
+                        </div>
+                      </div>
+                      <hr />
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
     </InstructorRoute>
   );
 };
