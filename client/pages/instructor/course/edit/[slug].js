@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import { Form, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CourseCreateForm from "../../../../components/forms/CourseCreateForm.js";
 import InstructorRoute from "../../../../components/routes/InstructorRoute.js";
 import Resizer from 'react-image-file-resizer';
 import { toast } from "react-toastify";
+import LessonModal from "./modal.js";
 
 const CourseEdit = () => {
   const router = useRouter();
   const [buttonValue, setButtonValue] = useState('Save & Continue');
-  
+  const [showModal, setShowModal] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState(null);
+
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -27,14 +28,18 @@ const CourseEdit = () => {
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
   const { slug } = router.query;
 
+  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('upload video');
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
+
   useEffect(() => {
     loadCourse();
   }, []);
 
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
-    if(data) setValues(data);
-    if(data && data.image)setImage(data.image);
+    if (data) setValues(data);
+    if (data && data.image) setImage(data.image);
   }
 
   const handleImage = (e) => {
@@ -51,7 +56,6 @@ const CourseEdit = () => {
         });
         console.log("IMAGE UPLOADED", data);
         // Set image in state
-        
         setImage(data);
         setValues({ ...values, loading: false });
       } catch (err) {
@@ -82,22 +86,18 @@ const CourseEdit = () => {
     }
   };
 
-  const handleDrag = (e, index)  => {
+  const handleDrag = (e, index) => {
     e.dataTransfer.setData('itemIndex', index);
-    // console.log("reached here")
   };
 
-  const handleDrop = async(e, index) => {
-    // Handle any drop-related functionality here if needed
-    // console.log("On drop => ", index)
+  const handleDrop = async (e, index) => {
     const movingItemIndex = e.dataTransfer.getData("itemIndex");
     const targetItemIndex = index;
     let allLessons = values.lessons;
     let movingItem = allLessons[movingItemIndex];
-    allLessons.splice(movingItemIndex, 1); // removed 1 item from the given index
+    allLessons.splice(movingItemIndex, 1);
     allLessons.splice(targetItemIndex, 0, movingItem);
-    //save the lessons in db
-    setValues({ ...values, lessons: [...allLessons]});
+    setValues({ ...values, lessons: [...allLessons] });
     const { data } = await axios.put(`/api/course/${slug}`, {
       ...values,
       image,
@@ -106,6 +106,33 @@ const CourseEdit = () => {
     toast("lessons updated")
     setButtonValue("Update");
   };
+
+  const handleDelete = async (index) => {
+    const answer = window.confirm("Are you sure you want to delete this lesson?");
+    if (!answer) return;
+    let allLessons = values.lessons;
+    const removed = allLessons.splice(index, 1);
+    setValues({ ...values, lessons: allLessons });
+    const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`);
+    console.log("LESSON DELETED => ", data)
+  }
+
+  const handleOpenModal = (lesson) => {
+    setSelectedLesson(lesson);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleVideo = () => {
+    console.log("handle video");
+  }
+
+  const handleUpdateLesson = () => {
+    console.log("handle update lesson");
+  }
 
   return (
     <InstructorRoute>
@@ -126,18 +153,17 @@ const CourseEdit = () => {
         <div className="col lesson-list">
           <h4>Lessons</h4>
           <br />
-          <ol >
+          <ol>
             {values && values.lessons && values.lessons.map((lesson, index) => (
               <li
                 key={index}
                 onDragOver={(e) => e.preventDefault()}
                 style={{ listStyle: 'none', marginBottom: '10px' }}
                 draggable
-                onDragStart={(e) => handleDrag(e,index)}
-                // onDragOver={handleDragOver(index)}
+                onDragStart={(e) => handleDrag(e, index)}
                 onDrop={(e) => handleDrop(e, index)}
               >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex' }}>
                   <div
                     style={{
                       width: '20px',
@@ -154,7 +180,18 @@ const CourseEdit = () => {
                     {index + 1}
                   </div>
                   <div>
-                    {lesson.title}
+                    <span style={{ cursor: 'pointer' }} onClick={() => handleOpenModal(lesson)}>
+                      {lesson.title}
+                    </span>
+                  </div>
+                  <div style={{ justifyContent: 'flex-end' }}>
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="btn btn-danger"
+                      style={{ justifyContent: 'flex-end', padding: '0.3rem', fontSize: '0.5rem' }}
+                    >
+                      delete lesson
+                    </button>
                   </div>
                 </div>
                 <hr />
@@ -168,13 +205,23 @@ const CourseEdit = () => {
           <button
             onClick={handleSubmit}
             disabled={values.loading || values.uploading}
-            className="btn btn-primary"
+            className="btn btn-primary "
             type="submit"
           >
             {values.loading ? 'Saving...' : buttonValue}
           </button>
         </div>
       </div>
+      <LessonModal
+        show={showModal}
+        handleClose={handleCloseModal}
+        lesson={selectedLesson}
+        handleVideo={handleVideo}
+        handleUpdateLesson={handleUpdateLesson}
+        uploadVideoButtonText={uploadVideoButtonText}
+        progress={progress}
+        uploading={uploading}
+      />
     </InstructorRoute>
   );
 };
