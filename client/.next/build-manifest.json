@@ -27,20 +27,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/instructor": [
+    "/course/[slug]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/instructor.js"
-    ],
-    "/instructor/course/edit/[slug]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/instructor/course/edit/[slug].js"
-    ],
-    "/instructor/course/view/[slug]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/instructor/course/view/[slug].js"
+      "static/chunks/pages/course/[slug].js"
     ]
   },
   "ampFirstPages": []

@@ -43,11 +43,7 @@ const InstructorIndex = () => {
                 <p style={{ color: "black", fontSize: "16px", marginBottom: "5px" }}><h5 className="pt-2">{course.name}</h5></p>
               </Link>
               <p style={{ marginTop: "-10px" }}><h6 className="pt-2">{course.lessons.length} Lessons</h6> </p>
-              {course.lessons.length < 5 ? (
-                <p style={myStyle} className="text-warning">
-                  At least 5 lessons are required to publish a course
-                </p>
-              ) : course.published ? (
+              {course.published ? (
                 <p style={myStyle} className="text-success">
                   Your course is live in the marketplace
                 </p>

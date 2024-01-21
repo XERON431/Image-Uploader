@@ -32,7 +32,8 @@ const closeButtonStyle = {
 const LessonModal = ({
   show,
   handleClose,
-  lesson,
+  selectedLesson,
+  setSelectedLesson,
   handleVideo,
   handleUpdateLesson,
   uploadVideoButtonText,
@@ -50,7 +51,8 @@ const LessonModal = ({
         <p>Update lesson</p>
         <hr />
         <UpdateLessonForm
-          lesson={lesson}
+          selectedLesson={selectedLesson}
+          setSelectedLesson={setSelectedLesson}
           handleVideo={handleVideo}
           handleUpdateLesson={handleUpdateLesson}
           uploadVideoButtonText={uploadVideoButtonText}

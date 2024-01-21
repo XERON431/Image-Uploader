@@ -11,7 +11,7 @@ const CourseEdit = () => {
   const router = useRouter();
   const [buttonValue, setButtonValue] = useState('Save & Continue');
   const [showModal, setShowModal] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedLesson, setSelectedLesson] = useState({});
 
   const [values, setValues] = useState({
     name: "",
@@ -113,8 +113,15 @@ const CourseEdit = () => {
     let allLessons = values.lessons;
     const removed = allLessons.splice(index, 1);
     setValues({ ...values, lessons: allLessons });
-    const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`);
-    console.log("LESSON DELETED => ", data)
+    if (removed.length > 0) {
+      try {
+        const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`);
+        console.log("LESSON DELETED => ", data);
+      } catch (error) {
+        console.error("Error deleting lesson:", error);
+      }
+    }
+    
   }
 
   const handleOpenModal = (lesson) => {
@@ -130,8 +137,21 @@ const CourseEdit = () => {
     console.log("handle video");
   }
 
-  const handleUpdateLesson = () => {
-    console.log("handle update lesson");
+  const handleUpdateLesson = async (e) => {
+    e.preventDefault();
+    const { data } = await axios.put(
+      `/api/course/lesson/${slug}/${selectedLesson._id}`, selectedLesson
+    );
+    setUploadButtonText("Upload Video");
+    setShowModal(false);
+    // update ui
+    if (data.ok) {
+      let arr = values.lessons;
+      const index = arr.findIndex((el) => {el && el._id === selectedLesson._id});
+      arr[index] = data.lesson;
+      setValues({ ...values, lessons: arr });
+      toast("Lesson updated");
+    }
   }
 
   return (
@@ -180,9 +200,11 @@ const CourseEdit = () => {
                     {index + 1}
                   </div>
                   <div>
-                    <span style={{ cursor: 'pointer' }} onClick={() => handleOpenModal(lesson)}>
-                      {lesson.title}
-                    </span>
+                    {lesson && (
+                      <span style={{ cursor: 'pointer' }} onClick={() => handleOpenModal(lesson)}>
+                        {lesson.title}
+                      </span>
+                    )}
                   </div>
                   <div style={{ justifyContent: 'flex-end' }}>
                     <button
@@ -215,7 +237,8 @@ const CourseEdit = () => {
       <LessonModal
         show={showModal}
         handleClose={handleCloseModal}
-        lesson={selectedLesson}
+        selectedLesson={selectedLesson}
+        setSelectedLesson={setSelectedLesson}
         handleVideo={handleVideo}
         handleUpdateLesson={handleUpdateLesson}
         uploadVideoButtonText={uploadVideoButtonText}

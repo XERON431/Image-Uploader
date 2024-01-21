@@ -1,7 +1,7 @@
 import React from "react";
 
 const UpdateLessonForm = ({
-  lesson,
+  selectedLesson,
   setSelectedLesson,
   handleUpdateLesson,
   uploading,
@@ -9,19 +9,25 @@ const UpdateLessonForm = ({
   handleVideo,
   progress,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleUpdateLesson();
-  };
+  const handleTitleChange = (e) => {
+    // Update only the 'title' property in selectedLesson
+    const updatedTitle = e.target.value;
 
+    // Update only the 'title' property in selectedLesson
+    setSelectedLesson((prevLesson) => ({
+      ...prevLesson,
+      title: updatedTitle,
+    }));
+  };
   return (
     <div className="container pt-3">
-      <form onSubmit={handleSubmit}>
+      {JSON.stringify(selectedLesson)}
+      <form onSubmit={handleUpdateLesson}>
         <input
           type="text"
           className="form-control square"
-          onChange={(e) => setSelectedLesson({ ...lesson, title: e.target.value })}
-          value={lesson?.title || ""} 
+          onChange= {{handleTitleChange}}
+          value={selectedLesson?.title || ""} 
           placeholder="Title"
           autoFocus
           required
@@ -30,41 +36,16 @@ const UpdateLessonForm = ({
           className="form-control mt-3"
           cols="7"
           rows="7"
-          onChange={(e) => setSelectedLesson({ ...lesson, content: e.target.value })}
-          value={lesson?.content || ""} 
+          onChange={(e) => setSelectedLesson({ ...selectedLesson, content: e.target.value })}
+          value={selectedLesson?.content || ""} 
         ></textarea>
-        <label className="btn btn-dark btn-block text-left mt-3">
-          {uploadVideoButtonText}
-          <input onChange={handleVideo} type="file" accept="video/*" hidden />
-        </label>
-        {!uploading && lesson?.video && lesson.video.Location && (
-          <div className="pt-2 d-flex justify-content-center">
-            
-          </div>
-        )}
-        {uploading && (
-          <div className="progress mt-2">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: `${progress}%` }}
-              aria-valuenow={progress}
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              {progress}%
-            </div>
-          </div>
-        )}
-        <div className="d-flex justify-content-between">
-          <span className="pt-3 badge">Preview</span>
-        </div>
         <button
           type="submit"
           className="col mt-3 btn btn-primary"
           size="small"
           loading={uploading}
           style={{ padding: "10px 215px", borderRadius: "10px" }}
+          onClick={handleUpdateLesson}
         >
           Save
         </button>
