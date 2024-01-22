@@ -5,6 +5,7 @@ import slugify from "slugify";
 import {readFileSync} from'fs' 
 import dotenv from 'dotenv';
 // import { useRouter } from 'next/router';
+import User from "../models/user.js";
 dotenv.config();
 
 const awsConfig = {
@@ -267,3 +268,88 @@ export const unpublish = async (req, res) => {
    return  res.json(all);
 
   }
+
+  export const checkEnrollment=async (req,res)=>
+  {
+    try
+    {
+        console.log("hello ji");
+      const {courseId}=req.params;
+      const user= await User.findById(req.auth._id).exec();
+      let ids=[];
+      let length=user.courses && user.courses.length;
+      if(user.courses){
+      for(let i=0;i<user.courses.length;i++)
+      {
+        ids.push(user.courses[i].toString())
+      }
+      }
+      res.json({
+        status:ids.includes(courseId),
+        course:await Course.findById(courseId).exec()
+      })
+    }catch(err)
+    {
+      console.log("bro");
+    }
+  }
+
+  export const freeEnrollment=async(req,res)=>
+{
+  try
+  {
+    console.log("hello from free enrollment")
+  const course=await Course.findById(req.params.courseId).exec();
+  // console.log("Here====="+course._id);
+
+  if(course.price!=0) return;
+  const result=await User.findByIdAndUpdate(req.auth._id,
+    {
+      $addToSet:{courses:course._id},
+    },{new:true}).exec();
+    res.json({message:"Congratulations! You have successfully enrolled",
+      course,})
+  }catch(err)
+  {
+    console.log(err);
+    return res.status(400).send("Enrollment failed");
+  }
+}
+
+export const paidEnrollment=async(req,res)=>
+{
+  try
+  {
+  const course=await Course.findById(req.params.courseId).exec();
+  // console.log("Here====="+course._id);
+
+  if(course.free) return;
+  const result=await User.findByIdAndUpdate(req.auth._id,
+    {
+      $addToSet:{courses:course._id},
+    },{new:true}).exec();
+    res.json({message:"Congratulations! You have successfully enrolled",
+      course,})
+  }catch(err)
+  {
+    console.log(err);
+    return res.status(400).send("Enrollment failed");
+  }
+}
+
+
+export const userCourses=async(req,res)=>
+{
+  try
+  {
+    const user=await User.findById(req.auth._id).exec();
+    // console.log("fdfdfdf"+user);
+    const courses=await Course.find({_id:{$in:user.courses}})
+    .populate("instructor","_id name").exec();
+    // console.log(courses);
+    res.json(courses);
+  }catch(err)
+  {
+    console.log(err);
+  }
+}

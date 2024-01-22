@@ -1,4 +1,4 @@
-import { withRouter } from "next/router";
+import { Router } from "next/router";
 import axios from "axios";
 import CourseCard from "../components/cards/CourseCard";
 import Head from "next/head";

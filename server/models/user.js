@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const {Schema}=mongoose;
-
+const { ObjectId } = mongoose.Schema;
 const userSchema =new Schema(
     {
         name:{
@@ -36,12 +36,13 @@ const userSchema =new Schema(
         type: String, // Specify the type as String
         default: "", // Define a default value if needed
       },
-        stripe_seller: {},
-        stripeSession: {},
-        passwordResetCode :{
-            type: String,
-            default: "",
-        },
+      stripe_seller: {},
+      stripeSession: {},
+      passwordResetCode :{
+          type: String,
+          default: "",
+      },
+      courses: [{ type: ObjectId, ref:"Course"}],
 
     },
    
