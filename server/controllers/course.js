@@ -6,6 +6,8 @@ import {readFileSync} from'fs'
 import dotenv from 'dotenv';
 // import { useRouter } from 'next/router';
 import User from "../models/user.js";
+import Completed from "../models/completed.js";
+import course from "../models/course.js";
 dotenv.config();
 
 const awsConfig = {
@@ -352,4 +354,45 @@ export const userCourses=async(req,res)=>
   {
     console.log(err);
   }
+}
+
+export const markCompleted = async (req,res) => {
+    const { courseId, lessonId} = req.body;
+    // console.log(courseId, lessonId);
+    const existing = await Completed.findOne({
+        user: req.auth._id,
+        course: courseId,
+    }).exec();
+    if(existing)
+    {
+        const updated = await Completed.findOneAndUpdate(
+            {
+                user: req.auth._id,
+                course: courseId,
+            },
+            {
+                $addToSet: { lessons: lessonId}
+            }
+        ).exec();
+        res.json({ ok: true});
+    } else {
+        const created = await new Completed({
+            user: req.auth._id,
+            course: courseId,
+            lessons: lessonId,
+        }).save();
+        res.json({ ok:true});
+    }
+}
+
+export const listCompleted = async (req,res) => {
+    try{
+        const list = await Completed.findOne({
+            user: req.auth._id,
+            course: req.body.courseId,
+        }).exec();
+        list && res.json(list.lessons);
+    } catch (err){
+        console.log(err);
+    }
 }

@@ -5,7 +5,7 @@ const router = express.Router();
  import { isInstructor, requireSignin, isEnrolled } from "../middlewares/index.js";
 
 import {uploadImage, create, read, uploadVideo, addLesson, update, removeLesson, updateLesson ,publish ,
-    unpublish, courses, checkEnrollment, freeEnrollment, paidEnrollment, userCourses} from '../controllers/course.js';
+    unpublish, courses, checkEnrollment, freeEnrollment, paidEnrollment, userCourses, markCompleted, listCompleted} from '../controllers/course.js';
     // import { } from '../controllers/course.js';
 // import {removeImage}  from '../controllers/course.js';
 router.get('/courses',courses);
@@ -32,5 +32,7 @@ router.post('/paid-enrollment/:courseId',requireSignin,paidEnrollment); //our ow
 router.get('/user-courses', requireSignin,userCourses);
 
 router.get("/user/course/:slug",requireSignin,isEnrolled,read);
+router.post("/mark-completed", requireSignin, markCompleted);
+router.post("/list-completed", requireSignin, listCompleted);
 export default router;
  
