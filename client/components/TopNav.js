@@ -9,7 +9,6 @@ import {
   faSignOutAlt,
   faUser,
   faChalkboardTeacher,
-  faUserGraduate,
 } from '@fortawesome/free-solid-svg-icons';
 import { Context } from '../context';
 import axios from 'axios';
@@ -77,7 +76,6 @@ const TopNav = () => {
     };
   }, []);
 
-  const isUserInstructor = state.user && state.user.role == 'Instructor';
   const isDashboardActive = router.pathname == '/user';
 
   return (
@@ -86,35 +84,27 @@ const TopNav = () => {
         <Link href="/">
           <p style={activeButton == '/' ? activeButtonStyle : buttonStyle}>
             <FontAwesomeIcon icon={faHome} style={{ marginRight: '5px' }} />
-            App
+            Global Gallery
           </p>
         </Link>
         {state.user && (
-          <Link href={isUserInstructor ? '/instructor/course/create' : '/user/become-instructor'}>
-            <p style={(activeButton == '/instructor/course/create' || (activeButton == '/user/become-instructor' && !isDashboardActive)) ? activeButtonStyle : buttonStyle}>
-              {isUserInstructor ? (
+          <Link href={'/creator/image/create'}>
+            <p style={(activeButton == '/creator/image/create') ? activeButtonStyle : buttonStyle}>
                 <>
                   <FontAwesomeIcon icon={faChalkboardTeacher} style={{ marginRight: '5px' }} />
-                  Create Course
+                  Create Image
                 </>
-              ) : (
-                <>
-                  <FontAwesomeIcon icon={faUserGraduate} style={{ marginRight: '5px' }} />
-                  Become Instructor
-                </>
-              )}
             </p>
           </Link>
         )}
-        {state.user && isUserInstructor && (
-          <Link href="/instructor">
-            <p style={activeButton == '/instructor' ? activeButtonStyle : buttonStyle}>
+        {state.user && (
+          <Link href="/creator">
+            <p style={activeButton == '/creator' ? activeButtonStyle : buttonStyle}>
               <FontAwesomeIcon icon={faChalkboardTeacher} style={{ marginRight: '5px' }} />
-              Instructor
+              Creations
             </p>
           </Link>
         )}
-        {/* ... (other buttons or links) */}
       </div>
 
       <div style={{ position: 'relative' }}>

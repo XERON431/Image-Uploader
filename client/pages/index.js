@@ -1,43 +1,19 @@
 import { Router } from "next/router";
 import axios from "axios";
-import CourseCard from "../components/cards/CourseCard";
-import Head from "next/head";
-import { useState,useEffect } from "react";
-const Index = ({courses}) => {
+import ImageCard from "../components/cards/ImageCard";
+const Index = ({images}) => {
   
-  // const [courses , setCourses]=useState([]);
-
-  // useEffect(()=>
-  // {
-  //   const fetchcourses =async () =>
-  //   {
-  //     const {data} = await axios.get("/api/courses");
-  //     console.log(data);
-  //     setCourses(data);
-
-  //   };
-
-  //   fetchcourses();
-
-  // }, []);
-
-
-
   return (
     <>
       <div className="jumbotron text-center bg-primary square">
-        <h1>Become A FullStack Web Developer</h1>
+        <h1>Global Image Showcase</h1>
         <hr style={{ borderBottom: "2px solid silver", width: "100px" }} />
-        <p className="lead">
-          Master JavaScript React Node MongoDB MERN Stack & Start Building Real
-          Projects
-        </p>
       </div>
       <div className="container-fluid">
         <div className="row pt-2">
-          {courses?.map((course) => (
-            <div key={course._id} className="col-md-4">
-              <CourseCard key={course._id} course={course} />
+          {images?.map((image) => (
+            <div key={image._id} className="col-md-4">
+              <ImageCard key={image._id} image={image} />
             </div>
           ))}
         </div>
@@ -48,10 +24,10 @@ const Index = ({courses}) => {
 };
 
 export  async function getServerSideProps() {
-  const { data } = await axios.get('http://localhost:3000/api/courses');
+  const { data } = await axios.get('http://localhost:3000/api/images');
   return { 
     props: {
-      courses: data,
+      images: data,
     },
   }
 }

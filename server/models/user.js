@@ -28,21 +28,13 @@ const userSchema =new Schema(
 
         role:{
             type : [String],
-            default: ["Instructor"],
-            enum: ["Subscriber","Instructor","Admin"],
+            default: "Creator",
         },
-    //    payment data
-    stripe_account_id: {
-        type: String, // Specify the type as String
-        default: "", // Define a default value if needed
-      },
-      stripe_seller: {},
-      stripeSession: {},
       passwordResetCode :{
           type: String,
           default: "",
       },
-      courses: [{ type: ObjectId, ref:"Course"}],
+      images: [{ type: ObjectId, ref:"Image"}],
 
     },
    

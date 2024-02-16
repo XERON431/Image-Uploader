@@ -2,6 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/user/course/[slug]": "pages/user/course/[slug].js",
-  "/user": "pages/user.js"
+  "/": "pages/index.js",
+  "/login": "pages/login.js",
+  "/user": "pages/user.js",
+  "/creator/image/create": "pages/creator/image/create.js",
+  "/creator": "pages/creator.js",
+  "/image/[slug]": "pages/image/[slug].js"
 }

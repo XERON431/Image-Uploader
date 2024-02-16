@@ -7,6 +7,8 @@ import { readdirSync } from 'fs';
 import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { join, dirname, resolve } from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,9 +17,8 @@ const app = express();
 
 const csrfProtection = csurf({ cookie: true });
 
-const mongoAtlasUri = 'mongodb+srv://username:siddhant@cluster0.gnmxc7i.mongodb.net/?retryWrites=true&w=majority';
 
-mongoose.connect(mongoAtlasUri, {
+mongoose.connect(process.env.mongoAtlasUri, {
   useNewUrlParser: true,
   // useFindAndModify: false,
   useUnifiedTopology:true,
@@ -58,6 +59,6 @@ app.get("/api/csrf-token", (req, res) => {
 });
 
 // port
-const port = process.env.PORT || 8001;
+const port = process.env.PORT;
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
